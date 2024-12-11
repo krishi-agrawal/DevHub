@@ -1,4 +1,4 @@
-import User from "../modals/user.modal.js"
+import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import { generateTokenAndCookie } from "../lib/utils/generateToken.js";
 
@@ -91,7 +91,7 @@ export const login = async(req, res) => {
 export const logout = async(req, res) => {
     try {
         res.cookie("jwt", "", {maxAge : 0})
-        res.status(200).json({error: "Logged out succesfully."})
+        res.status(200).json({message: "Logged out succesfully."})
     } catch (error) {
         console.log(`Error logging out: ${error.message}`)
         res.status(500).json({error: "Internal Server error"})
