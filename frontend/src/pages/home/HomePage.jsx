@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Posts from "../../components/common/Posts.jsx";
 import CreatePost from "./CreatePost.jsx";
+import { DataContext } from "../../context/DataProvider.js";
+import { useContext } from "react";
 
 const HomePage = () => {
 	const [feedType, setFeedType] = useState("forYou");
-
+	const {account, setAccount} = useContext(DataContext)
+	
 	return (
 		
 			<div className='flex-[4_4_0] mr-auto border-r border-gray-700 min-h-screen'>

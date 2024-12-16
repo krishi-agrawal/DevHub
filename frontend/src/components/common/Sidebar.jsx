@@ -1,22 +1,64 @@
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
+import { DataContext } from "../../context/DataProvider";
 
-const Sidebar = () => {
-	const data = {
-		fullName: "John Doe",
-		username: "johndoe",
-		profileImg: "/avatars/boy1.png",
+const Sidebar = ({ setAuth }) => {
+	const {setAccount, account} = useContext(DataContext)
+	const navigate = useNavigate();
+
+	
+
+	// Handle logout
+	const handleLogout = async () => {
+		try {
+			const res = await fetch("/api/auth/logout", {
+				method: "POST",
+			});
+			const data = await res.json();
+
+			if (!res.ok) {
+				throw new Error(data.error || "Logout failed");
+			}
+
+			// Clear user data and redirect to login
+			const fetchAuthUser = async () => {
+				try {
+					const res = await fetch("/api/auth/me");
+					const data = await res.json();
+					
+					if (data.error) {
+						setAuth(false)
+						setAccount({fullname:"", username:"", _id:""})
+						return
+					}
+					if (!res.ok) {
+						throw new Error(data.error || "Something went wrong");
+					}
+					console.log("authUser is here:", data);
+				} catch (error) {
+					console.error(error);
+				}
+			};
+	
+			fetchAuthUser();
+			alert("Logged out successfully");
+			navigate("/login");
+		} catch (error) {
+			console.error(error);
+			alert("Logout failed");
+		}
 	};
 
 	return (
 		<div className='md:flex-[2_2_0] w-18 max-w-52'>
 			<div className='sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full'>
-				<Link to='/' className='flex justify-center md:justify-start items-center'>
-					<h2 className='px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900 hidden md:block text-4xl font-extrabold text-secondary mt-3'>DevHub</h2>
+				<Link to='/' className='flex justify-center md:justify-start'>
+				<h2 className='px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900 hidden md:block text-4xl font-extrabold text-secondary mt-3'>DevHub</h2>
 					<h2 className='px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900 md:hidden font-extrabold text-secondary mt-3'>DH</h2>
 				</Link>
 				<ul className='flex flex-col gap-3 mt-4'>
@@ -41,7 +83,7 @@ const Sidebar = () => {
 
 					<li className='flex justify-center md:justify-start'>
 						<Link
-							to={`/profile/${data?.username}`}
+							to={`/profile/${account?.username}`}
 							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
 							<FaUser className='w-6 h-6' />
@@ -49,22 +91,28 @@ const Sidebar = () => {
 						</Link>
 					</li>
 				</ul>
-				{data && (
+				{account && (
 					<Link
-						to={`/profile/${data.username}`}
+						to={`/profile/${account.username}`}
 						className='mt-auto mb-10 flex gap-2 items-start transition-all duration-300 hover:bg-[#181818] py-2 px-4 rounded-full'
 					>
 						<div className='avatar hidden md:inline-flex'>
 							<div className='w-8 rounded-full'>
-								<img src={data?.profileImg || "/avatar-placeholder.png"} />
+								<img src={account?.profileImg || "/avatar-placeholder.png"} alt="Profile" />
 							</div>
 						</div>
 						<div className='flex justify-between flex-1'>
 							<div className='hidden md:block'>
-								<p className='text-white font-bold text-sm w-20 truncate'>{data?.fullName}</p>
-								<p className='text-slate-500 text-sm'>@{data?.username}</p>
+								<p className='text-white font-bold text-sm w-20 truncate'>{account?.fullName}</p>
+								<p className='text-slate-500 text-sm'>@{account?.username}</p>
 							</div>
-							<BiLogOut className='w-5 h-5 cursor-pointer' />
+							<BiLogOut
+								className='w-5 h-5 cursor-pointer'
+								onClick={(e) => {
+									e.preventDefault();
+									handleLogout();
+								}}
+							/>
 						</div>
 					</Link>
 				)}
@@ -72,4 +120,5 @@ const Sidebar = () => {
 		</div>
 	);
 };
+
 export default Sidebar;
