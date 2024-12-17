@@ -61,7 +61,7 @@ const Posts = ({ feedType }) => {
       {!isLoading && !error && posts.length > 0 && (
         <div>
           {posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <Post key={post._id} post={post} fetchPosts={fetchPosts} />
           ))}
         </div>
       )}

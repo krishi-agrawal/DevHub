@@ -3,21 +3,45 @@ import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../context/DataProvider";
+import LoadingSpinner from "./LoadingSpinner";
 
-const Post = ({ post }) => {
+const Post = ({ post, fetchPosts}) => {
+	const {account} = useContext(DataContext)
+	
 	const [comment, setComment] = useState("");
 	const postOwner = post.user;
 	const isLiked = false;
-
-	const isMyPost = true;
-
+	
+	const isMyPost = account._id == post.user._id
+	
 	const formattedDate = "1h";
-
+	
 	const isCommenting = false;
-
-	const handleDeletePost = () => {};
+	
+	const [isDelPending, setDelPending] = useState(false);
+	const handleDeletePost = async() => {
+		setDelPending(true)
+		try {
+			const res = await fetch(`/api/post/${post._id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+			}})
+			const data = await res.json()
+			console.log(data)
+			if (!res.ok) {
+				throw new Error(data.error || "Something went wrong");
+			}
+			fetchPosts()
+		} catch (error) {
+			console.log(error)
+		} finally{
+			setDelPending(false)
+		}
+	};
 
 	const handlePostComment = (e) => {
 		e.preventDefault();
@@ -46,6 +70,7 @@ const Post = ({ post }) => {
 						{isMyPost && (
 							<span className='flex justify-end flex-1'>
 								<FaTrash className='cursor-pointer hover:text-red-500' onClick={handleDeletePost} />
+								{isDelPending && <LoadingSpinner size='sm' />}
 							</span>
 						)}
 					</div>
