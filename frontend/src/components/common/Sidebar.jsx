@@ -33,7 +33,7 @@ const Sidebar = ({ setAuth }) => {
 					
 					if (data.error) {
 						setAuth(false)
-						setAccount({fullname:"", username:"", _id:""})
+						setAccount({fullname:"", username:"", _id:"", profileImg:""})
 						return
 					}
 					if (!res.ok) {

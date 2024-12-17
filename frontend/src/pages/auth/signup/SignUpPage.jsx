@@ -40,7 +40,7 @@ const SignUpPage = ({ setAuth }) => {
 			if (!res.ok) throw new Error(data.error || "Failed to create account");
 
 			// Success Logic (e.g., navigate, show message)
-			setAccount({fullname: data.fullname, username: data.username, _id: data._id})
+			setAccount({fullname: data.fullname, username: data.username, _id: data._id, profileImg: "/avatar-placeholder.png"})
 			setAuth(true)
 			alert("Account created successfully");
 			navigate("/");

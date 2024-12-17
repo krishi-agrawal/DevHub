@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Post from "./Post";
 import PostSkeleton from "../skeletons/PostSkeleton";
 
-const Posts = ({ feedType }) => {
+const Posts = ({ feedType, username, userId }) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,6 +13,10 @@ const Posts = ({ feedType }) => {
         return "/api/post/all";
       case "following":
         return "/api/post/following";
+      case "posts":
+        return `/api/post/user/${username}`;
+      case "likes":
+        return `/api/post/like/${userId}`;
       default:
         return "/api/post/all";
     }
@@ -41,7 +45,7 @@ const Posts = ({ feedType }) => {
 
   useEffect(() => {
     fetchPosts();
-  }, [feedType]);
+  }, [feedType, username]);
 
   return (
     <>
