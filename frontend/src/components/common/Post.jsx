@@ -13,7 +13,7 @@ const Post = ({ post, fetchPosts}) => {
 	
 	const [comment, setComment] = useState("");
 	const postOwner = post.user;
-	const isLiked = false;
+	const isLiked = post.likes.includes(account._id);
 	
 	const isMyPost = account._id == post.user._id
 	
@@ -22,6 +22,7 @@ const Post = ({ post, fetchPosts}) => {
 	const isCommenting = false;
 	
 	const [isDelPending, setDelPending] = useState(false);
+	const [isLiking, setIsLiking] = useState(false);
 	const handleDeletePost = async() => {
 		setDelPending(true)
 		try {
@@ -47,7 +48,26 @@ const Post = ({ post, fetchPosts}) => {
 		e.preventDefault();
 	};
 
-	const handleLikePost = () => {};
+	const handleLikePost = async() => {
+		setIsLiking(true)
+		try {
+			const res = await fetch(`/api/post/${post._id}/like`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+			}})
+			const data = await res.json()
+			console.log(data)
+			if (!res.ok) {
+				throw new Error(data.error || "Something went wrong");
+			}
+			fetchPosts()
+		} catch (error) {
+			console.log(error)
+		} finally{
+			setIsLiking(false)
+		}
+	};
 
 	return (
 		<>
@@ -154,6 +174,7 @@ const Post = ({ post, fetchPosts}) => {
 								<span className='text-sm text-slate-500 group-hover:text-green-500'>0</span>
 							</div>
 							<div className='flex gap-1 items-center group cursor-pointer' onClick={handleLikePost}>
+							{isLiking && <LoadingSpinner size='sm' />}
 								{!isLiked && (
 									<FaRegHeart className='w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500' />
 								)}
