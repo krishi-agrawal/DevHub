@@ -18,11 +18,10 @@ const Post = ({ post, fetchPosts}) => {
 	const isMyPost = account._id == post.user._id
 	
 	const formattedDate = "1h";
-	
-	const isCommenting = false;
-	
+		
 	const [isDelPending, setDelPending] = useState(false);
 	const [isLiking, setIsLiking] = useState(false);
+	const [isCommenting, setIsCommenting] = useState(false);
 	const handleDeletePost = async() => {
 		setDelPending(true)
 		try {
@@ -44,8 +43,30 @@ const Post = ({ post, fetchPosts}) => {
 		}
 	};
 
-	const handlePostComment = (e) => {
+	const handlePostComment = async(e) => {
 		e.preventDefault();
+		setIsCommenting(true)
+		try {
+			const res = await fetch(`/api/post/${post._id}/comment`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					
+				},
+				body: JSON.stringify({text: comment})
+			})
+			const data = await res.json()
+			console.log(data)
+			if (!res.ok) {
+				throw new Error(data.error || "Something went wrong");
+			}
+			fetchPosts()
+		} catch (error) {
+			console.log(error)
+		} finally{
+			setIsCommenting(false)
+		}
+
 	};
 
 	const handleLikePost = async() => {
@@ -157,11 +178,7 @@ const Post = ({ post, fetchPosts}) => {
 											onChange={(e) => setComment(e.target.value)}
 										/>
 										<button className='btn btn-primary rounded-full btn-sm text-white px-4'>
-											{isCommenting ? (
-												<span className='loading loading-spinner loading-md'></span>
-											) : (
-												"Post"
-											)}
+										{isCommenting ? <LoadingSpinner size='md' /> : "Post"}
 										</button>
 									</form>
 								</div>
