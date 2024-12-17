@@ -7,7 +7,7 @@ import { DataContext } from "../../../context/DataProvider"
 
 
 const LoginPage = ({ setAuth }) => {
-	const {account, setAccount} = useContext(DataContext)
+	const {setAccount} = useContext(DataContext)
 	const [formData, setFormData] = useState({
 		username: "",
 		password: "",
@@ -19,7 +19,7 @@ const LoginPage = ({ setAuth }) => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // Prevent form reload
+		e.preventDefault();
 		setIsPending(true);
 		setIsError(false);
 		setErrorMessage("");

@@ -6,19 +6,41 @@ import { IoCloseSharp } from "react-icons/io5";
 const CreatePost = () => {
 	const [text, setText] = useState("");
 	const [img, setImg] = useState(null);
+	const [isPending, setIsPending] = useState(false);
+	const [isError, setIsError] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
+
+	const handleSubmit = async(e) => {
+		e.preventDefault()
+		setIsPending(true)
+		setIsError(false)
+		setErrorMessage("")
+		try {
+			const res = await fetch("api/post/create",{
+				method: "POST",
+				headers: {"Content-Type": "application/json"},
+				body: JSON.stringify({text:text, image:img})
+			})
+
+			
+			const data = await res.json();
+			if (!res.ok) {
+				throw new Error(data.error || "Something went wrong");
+			}
+			alert("Post created successfully");
+		} catch (error) {
+			setIsError(true);
+			setErrorMessage(error.message);
+		} finally{
+			setIsPending(false)
+		}
+	}
 
 	const imgRef = useRef(null);
 
-	const isPending = false;
-	const isError = false;
 
 	const data = {
 		profileImg: "/avatars/boy1.png",
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		alert("Post created successfully");
 	};
 
 	const handleImgChange = (e) => {
@@ -72,7 +94,7 @@ const CreatePost = () => {
 						{isPending ? "Posting..." : "Post"}
 					</button>
 				</div>
-				{isError && <div className='text-red-500'>Something went wrong</div>}
+				{isError && <div className='text-red-500'>{errorMessage}</div>}
 			</form>
 		</div>
 	);
