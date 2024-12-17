@@ -1,10 +1,31 @@
 import { Link } from "react-router-dom";
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
-import { USERS_FOR_RIGHT_PANEL } from "../../utils/db/dummyData.js"
+import useFollow from "../../hooks/useFollow"
+// import { USERS_FOR_RIGHT_PANEL } from "../../utils/db/dummyData.js"
+import { useEffect, useState } from "react";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 const RightPanel = () => {
-	const isLoading = true;
+	const isLoading = false;
+	const [suggestedUsers, setSuggestedUsers] = useState([])
+	const {follow, isPending} = useFollow()
+	const handlerFunc = async() => {
+		try {
+			const res = await fetch("/api/user/suggested");
+			const data = await res.json();
+			setSuggestedUsers(data);
+			if (!res.ok) throw new Error(data.error || "Failed to fetch users.");
+		  } catch (error) {
+			console.error(error.message);
+		  }
+	}
+	useEffect(() => {
+		handlerFunc();
+	  }, [follow]);
 
+	console.log("Suggested Users:", suggestedUsers);
+
+	if (suggestedUsers?.length === 0) return <div className='md:w-64 w-0'></div>;
 	return (
 		<div className='hidden lg:block my-4 mx-2'>
 			<div className='bg-[#31313f] p-4 rounded-md sticky top-2'>
@@ -20,7 +41,7 @@ const RightPanel = () => {
 						</>
 					)}
 					{!isLoading &&
-						USERS_FOR_RIGHT_PANEL?.map((user) => (
+						suggestedUsers?.map((user) => (
 							<Link
 								to={`/profile/${user.username}`}
 								className='flex items-center justify-between gap-4'
@@ -34,7 +55,7 @@ const RightPanel = () => {
 									</div>
 									<div className='flex flex-col'>
 										<span className='font-semibold tracking-tight truncate w-28'>
-											{user.fullName}
+											{user.fullname}
 										</span>
 										<span className='text-sm text-slate-500'>@{user.username}</span>
 									</div>
@@ -42,9 +63,13 @@ const RightPanel = () => {
 								<div>
 									<button
 										className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
-										onClick={(e) => e.preventDefault()}
+									onClick={(e) =>{ 
+										e.preventDefault()
+										follow(user._id)
+										}
+										}
 									>
-										Follow
+										{isPending ? <LoadingSpinner size='sm' /> : "Follow"}
 									</button>
 								</div>
 							</Link>

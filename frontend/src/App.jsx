@@ -14,7 +14,7 @@ const PrivateRoute = ({isAuth, setAuth}) => {
   console.log(isAuth)
   return isAuth ? <>
     <Sidebar setAuth={setAuth}/>
-    <Outlet/>
+    <Outlet />
     <RightPanel />
   </>
   :
