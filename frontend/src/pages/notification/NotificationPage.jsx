@@ -4,34 +4,43 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
+import { useEffect, useState } from "react";
 
 const NotificationPage = () => {
 	const isLoading = false;
-	const notifications = [
-		{
-			_id: "1",
-			from: {
-				_id: "1",
-				username: "johndoe",
-				profileImg: "/avatars/boy2.png",
-			},
-			type: "follow",
-		},
-		{
-			_id: "2",
-			from: {
-				_id: "2",
-				username: "janedoe",
-				profileImg: "/avatars/girl1.png",
-			},
-			type: "like",
-		},
-	];
+	const [notifications, setNotifications] = useState([])
+	const [isPending, setIsPending] = useState([])
+	
+	const getNotifications = async() => {
+		setIsPending(true)
+		try {
+			const res = await fetch("/api/notification");
+			const data = await res.json();
+			if (!res.ok) throw new Error(data.error || "Something went wrong");
+			setNotifications(data)
+		} catch (error) {
+			throw new Error(error);
+		} finally{
+			setIsPending(false)
+		}
+	}
 
-	const deleteNotifications = () => {
-		alert("All notifications deleted");
+	const deleteNotifications = async() => {
+		try {
+			const res = await fetch("/api/notification", {
+				method: "DELETE"
+			});
+			const data = await res.json();
+			if (!res.ok) throw new Error(data.error || "Something went wrong");
+			getNotifications()
+			// alert("All notifications deleted");
+		} catch (error) {
+			throw new Error(error);
+		}
 	};
-
+	useEffect(() => {
+		getNotifications()
+	}, [])
 	return (
 		<>
 			<div className='flex-[4_4_0] border-l border-r border-gray-700 min-h-screen'>
@@ -51,7 +60,7 @@ const NotificationPage = () => {
 						</ul>
 					</div>
 				</div>
-				{isLoading && (
+				{isPending && (
 					<div className='flex justify-center h-full items-center'>
 						<LoadingSpinner size='lg' />
 					</div>

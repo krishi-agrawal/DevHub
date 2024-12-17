@@ -41,7 +41,7 @@ const LoginPage = ({ setAuth }) => {
 			}
 
 			// Navigate to the homepage after successful login
-			setAccount({fullname: data.fullname, username: data.username, _id: data._id})
+			setAccount({fullname: data.fullname, username: data.username, _id: data._id, profileImg: data.profileImg || "./avatar-placeholder.png"})
 			// console.log(account)
 			setAuth(true)
 			navigate("/");

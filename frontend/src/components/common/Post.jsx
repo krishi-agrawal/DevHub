@@ -6,18 +6,18 @@ import { FaTrash } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../context/DataProvider";
+import { formatPostDate } from "../../utils/date/index";
 import LoadingSpinner from "./LoadingSpinner";
 
 const Post = ({ post, fetchPosts}) => {
 	const {account} = useContext(DataContext)
-	
+	const formattedDate = formatPostDate(post.createdAt);
 	const [comment, setComment] = useState("");
 	const postOwner = post.user;
 	const isLiked = post.likes.includes(account._id);
 	
 	const isMyPost = account._id == post.user._id
 	
-	const formattedDate = "1h";
 		
 	const [isDelPending, setDelPending] = useState(false);
 	const [isLiking, setIsLiking] = useState(false);
