@@ -168,12 +168,12 @@ const ProfilePage = () => {
 								</div>
 
 								<div className='flex gap-2 flex-wrap'>
-									{user?.link && (
-										<div className='flex gap-1 items-center '>
-											<>
-												<FaLink className='w-3 h-3 text-slate-500' />
-												{user.links.map((link) => {
-													<a
+									{user?.links?.length > 0 && (
+										<div className='flex gap-1 items-center'>
+											<FaLink className='w-3 h-3 text-slate-500' />
+											{user.links.map((link, index) => (
+												<a
+													key={index} // Always add a unique `key` when mapping
 													href={link}
 													target='_blank'
 													rel='noreferrer'
@@ -181,9 +181,7 @@ const ProfilePage = () => {
 												>
 													{link}
 												</a>
-												})}
-												
-											</>
+											))}
 										</div>
 									)}
 									<div className='flex gap-2 items-center'>

@@ -30,11 +30,17 @@ const CreatePost = () => {
 				throw new Error(data.error || "Something went wrong");
 			}
 			alert("Post created successfully");
+			
 		} catch (error) {
 			setIsError(true);
 			setErrorMessage(error.message);
-		} finally{
-			setIsPending(false)
+		} finally {
+			setIsPending(false);
+			setImg(null);      // Clear the image state
+			setText("");       // Reset the text state to an empty string
+			if (imgRef.current) {
+				imgRef.current.value = null; // Ensure file input is cleared
+			}
 		}
 	}
 
