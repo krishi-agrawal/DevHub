@@ -5,6 +5,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
+import { BiSolidChat } from "react-icons/bi";
 import { DataContext } from "../../context/DataProvider";
 
 const Sidebar = ({ setAuth }) => {
@@ -55,7 +56,7 @@ const Sidebar = ({ setAuth }) => {
 	};
 
 	return (
-		<div className='md:flex-[2_2_0] w-18 max-w-52'>
+		<div className='md:flex-[2_2_0] w-18 max-w-52 bg-[#31313f] pl-10 items-center'>
 			<div className='sticky top-0 left-0 h-screen flex flex-col border-r border-gray-700 w-20 md:w-full'>
 				<Link to='/' className='flex justify-center md:justify-start'>
 				<h2 className='px-2 w-12 h-12 rounded-full fill-white hover:bg-stone-900 hidden md:block text-4xl font-extrabold text-secondary mt-3'>DevHub</h2>
@@ -65,7 +66,7 @@ const Sidebar = ({ setAuth }) => {
 					<li className='flex justify-center md:justify-start'>
 						<Link
 							to='/'
-							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
+							className='flex gap-3 items-center hover:bg-accent transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
 							<MdHomeFilled className='w-8 h-8' />
 							<span className='text-lg hidden md:block'>Home</span>
@@ -74,7 +75,7 @@ const Sidebar = ({ setAuth }) => {
 					<li className='flex justify-center md:justify-start'>
 						<Link
 							to='/notifications'
-							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
+							className='flex gap-3 items-center hover:bg-accent transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
 							<IoNotifications className='w-6 h-6' />
 							<span className='text-lg hidden md:block'>Notifications</span>
@@ -84,10 +85,20 @@ const Sidebar = ({ setAuth }) => {
 					<li className='flex justify-center md:justify-start'>
 						<Link
 							to={`/profile/${account?.username}`}
-							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
+							className='flex gap-3 items-center hover:bg-accent transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
-							<FaUser className='w-6 h-6' />
-							<span className='text-lg hidden md:block'>Profile</span>
+							<FaUser className='w-6 h-6 ' />
+							<span className='text-lg hidden md:block '>Profile</span>
+						</Link>
+					</li>
+
+					<li className='flex justify-center md:justify-start'>
+						<Link
+							to={"/chat"}
+							className='flex gap-3 items-center hover:bg-accent transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
+						>
+							<BiSolidChat className='w-6 h-6' />
+							<span className='text-lg hidden md:block '>Chat Rooms</span>
 						</Link>
 					</li>
 				</ul>

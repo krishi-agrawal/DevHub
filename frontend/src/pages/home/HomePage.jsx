@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Posts from "../../components/common/Posts.jsx";
 import CreatePost from "./CreatePost.jsx";
-import { DataContext } from "../../context/DataProvider.js";
-import { useContext } from "react";
+
 
 const HomePage = () => {
 	const [feedType, setFeedType] = useState("forYou");
-	const {account, setAccount} = useContext(DataContext)
 	
 	return (
 		
 			<div className='flex-[4_4_0] mr-auto border-r border-gray-700 min-h-screen'>
-				{/* Header */}
 				<div className='flex w-full border-b border-gray-700'>
 					<div
 						className={
@@ -22,7 +19,7 @@ const HomePage = () => {
 					>
 						For you
 						{feedType === "forYou" && (
-							<div className='absolute bottom-0 w-10  h-1 rounded-full bg-primary'></div>
+							<div className='absolute bottom-0 w-10  h-1 rounded-full bg-secondary'></div>
 						)}
 					</div>
 					<div
@@ -31,15 +28,13 @@ const HomePage = () => {
 					>
 						Following
 						{feedType === "following" && (
-							<div className='absolute bottom-0 w-10  h-1 rounded-full bg-primary'></div>
+							<div className='absolute bottom-0 w-10  h-1 rounded-full bg-secondary'></div>
 						)}
 					</div>
 				</div>
 
-				{/*  CREATE POST INPUT */}
 				<CreatePost />
 
-				{/* POSTS */}
 				<Posts feedType={feedType} />
 			</div>
 		

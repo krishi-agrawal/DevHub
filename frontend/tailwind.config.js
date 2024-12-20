@@ -21,7 +21,9 @@ export default {
 				// 	secondary: "rgb(24, 24, 24)",
 				// },
 			},
-      "night"
+      "night",
+      "forest",
+      "retro",
 		],
 	},
 }

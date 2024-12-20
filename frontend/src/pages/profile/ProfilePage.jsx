@@ -6,13 +6,12 @@ import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkele
 import EditProfileModal from "./EditProfileModal";
 import { formatMemberSinceDate } from "../../utils/date";
 
-import { POSTS } from "../../utils/db/dummyData";
-
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { DataContext } from "../../context/DataProvider";
+import useUpdateUserProfile from "../../hooks/userUpdateUserProfile";
 
 const ProfilePage = () => {
 	const {account} = useContext(DataContext)
@@ -27,9 +26,11 @@ const ProfilePage = () => {
 	const {username} = useParams()
 	const [user, setUser] = useState()
 	const memberSinceDate = formatMemberSinceDate(user?.createdAt);
+
+	const { isUpdatingProfile, updateProfile } = useUpdateUserProfile()
 	
 	const isMyProfile = account.username === username
-	
+	// const {follow, isPending} = useFollow()
 	const handler = async() => {
 		setIsLoading(true)
 		try {
@@ -46,9 +47,7 @@ const ProfilePage = () => {
 			setIsLoading(false)
 		}
 	}
-	useEffect(() => {
-		handler()
-	}, [username])
+
 
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
@@ -61,6 +60,11 @@ const ProfilePage = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+
+	// const amIFollowing = account.following.includes(user?._id)
+	useEffect(() => {
+		handler()
+	}, [username, updateProfile, account])
 
 	return (
 		<>
@@ -76,8 +80,11 @@ const ProfilePage = () => {
 									<FaArrowLeft className='w-4 h-4' />
 								</Link>
 								<div className='flex flex-col'>
-									<p className='font-bold text-lg'>{user?.fullName}</p>
-									<span className='text-sm text-slate-500'>{POSTS?.length} posts</span>
+									<p className='font-bold text-lg'>
+									{!isMyProfile && user?.fullname}
+									{isMyProfile && account.fullname}
+									</p>
+									{/* <span className='text-sm text-slate-500'>{POSTS?.length} posts</span> */}
 								</div>
 							</div>
 							{/* COVER IMG */}
@@ -128,24 +135,34 @@ const ProfilePage = () => {
 								{!isMyProfile && (
 									<button
 										className='btn btn-outline rounded-full btn-sm'
-										onClick={() => alert("Followed successfully")}
+										onClick={() => 
+										alert("hi")
+										// follow(user?.id)
+										}
 									>
+										{/* {isPending && "Loading..."}
+										{!isPending && amIFollowing && "Unfollow"}
+										{!isPending && !amIFollowing && "Follow"} */}
 										Follow
 									</button>
 								)}
 								{(coverImg || profileImg) && (
 									<button
 										className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-										onClick={() => alert("Profile updated successfully")}
+										onClick={async () => {
+											await updateProfile({ coverImg, profileImg });
+											// setProfileImg(null);
+											// setCoverImg(null);
+										}}
 									>
-										Update
+										{isUpdatingProfile ? "Updating..." : "Update"}
 									</button>
 								)}
 							</div>
 
 							<div className='flex flex-col gap-4 mt-14 px-4'>
 								<div className='flex flex-col'>
-									<span className='font-bold text-lg'>{user?.fullName}</span>
+									<span className='font-bold text-lg'>{user?.fullname}</span>
 									<span className='text-sm text-slate-500'>@{user?.username}</span>
 									<span className='text-sm my-1'>{user?.bio}</span>
 								</div>
@@ -155,14 +172,17 @@ const ProfilePage = () => {
 										<div className='flex gap-1 items-center '>
 											<>
 												<FaLink className='w-3 h-3 text-slate-500' />
-												<a
-													href='https://youtube.com/@asaprogrammer_'
+												{user.links.map((link) => {
+													<a
+													href={link}
 													target='_blank'
 													rel='noreferrer'
 													className='text-sm text-blue-500 hover:underline'
 												>
-													youtube.com/@asaprogrammer_
+													{link}
 												</a>
+												})}
+												
 											</>
 										</div>
 									)}

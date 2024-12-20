@@ -1,7 +1,5 @@
 import { FaRegComment } from "react-icons/fa";
-import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
-import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
@@ -95,15 +93,17 @@ const Post = ({ post, fetchPosts}) => {
 			<div className='flex gap-2 items-start p-4 border-b border-gray-700'>
 				<div className='avatar'>
 					<Link to={`/profile/${postOwner.username}`} className='w-8 rounded-full overflow-hidden'>
-						<img src={postOwner.profileImg || "/avatar-placeholder.png"} />
+						{!isMyPost && <img src={postOwner.profileImg || "/avatar-placeholder.png"} />}
+						{isMyPost && <img src={account.profileImg || "/avatar-placeholder.png"} />}
 					</Link>
 				</div>
 				<div className='flex flex-col flex-1'>
-					<div className='flex gap-2 items-center'>
+					<div className='flex gap-2 items-center px-4 py-3 rounded bg-[#31313f]'>
 						<Link to={`/profile/${postOwner.username}`} className='font-bold'>
-							{postOwner.fullName}
+							{!isMyPost && postOwner.fullname}
+							{isMyPost && account.fullname}
 						</Link>
-						<span className='text-gray-700 flex gap-1 text-sm'>
+						<span className='flex gap-1 text-sm text-secondary'>
 							<Link to={`/profile/${postOwner.username}`}>@{postOwner.username}</Link>
 							<span>·</span>
 							<span>{formattedDate}</span>
@@ -125,8 +125,8 @@ const Post = ({ post, fetchPosts}) => {
 							/>
 						)}
 					</div>
-					<div className='flex justify-between mt-3'>
-						<div className='flex gap-4 items-center w-2/3 justify-between'>
+					<div className='flex mt-3'>
+						<div className='flex gap-8 items-center w-2/3 justify-start'>
 							<div
 								className='flex gap-1 items-center cursor-pointer group'
 								onClick={() => document.getElementById("comments_modal" + post._id).showModal()}
@@ -186,10 +186,10 @@ const Post = ({ post, fetchPosts}) => {
 									<button className='outline-none'>close</button>
 								</form>
 							</dialog>
-							<div className='flex gap-1 items-center group cursor-pointer'>
-								<BiRepost className='w-6 h-6  text-slate-500 group-hover:text-green-500' />
-								<span className='text-sm text-slate-500 group-hover:text-green-500'>0</span>
-							</div>
+							{/* <div className='flex gap-1 items-center group cursor-pointer'>  */}
+								 {/* <BiRepost className='w-6 h-6  text-slate-500 group-hover:text-green-500' /> */}
+								{/* <span className='text-sm text-slate-500 group-hover:text-green-500'>0</span> */}
+						 	{/* </div>  */}
 							<div className='flex gap-1 items-center group cursor-pointer' onClick={handleLikePost}>
 							{isLiking && <LoadingSpinner size='sm' />}
 								{!isLiked && (
@@ -206,9 +206,9 @@ const Post = ({ post, fetchPosts}) => {
 								</span>
 							</div>
 						</div>
-						<div className='flex w-1/3 justify-end gap-2 items-center'>
+						{/* <div className='flex w-1/3 justify-end gap-2 items-center'>
 							<FaRegBookmark className='w-4 h-4 text-slate-500 cursor-pointer' />
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</div>

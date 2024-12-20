@@ -103,11 +103,11 @@ export const updateProfile = async(req, res) => {
             user.password = await bcrypt.hash(newPassword, salt)
         }
 
-        if (Array.isArray(links)) {
-            user.links = links;
-        }else{
-            return res.status(400).json({error: "Problem with links."})    
-        }
+        // if (Array.isArray(links)) {
+        //     user.links = links;
+        // }else{
+        //     return res.status(400).json({error: "Problem with links."})    
+        // }
 
         if(profileImg){
             if(user.profileImg){

@@ -8,6 +8,8 @@ import NotificationPage from "./pages/notification/NotificationPage.jsx";
 import ProfilePage from "./pages/profile/ProfilePage.jsx";
 import DataProvider from "./context/DataProvider.js";
 import { useState } from "react";
+import ChatRooms from "./pages/chat/ChatRooms.jsx";
+import ChatRoom from "./pages/chat/ChatRoom.jsx";
 
 
 const PrivateRoute = ({isAuth, setAuth}) => {
@@ -34,13 +36,18 @@ function App() {
             <Route path="/" element= {<PrivateRoute isAuth={isAuth}/>}>
               <Route path="/" element={<HomePage />} />
             </Route>
-            <Route  path="/notifications" element= {<PrivateRoute isAuth={isAuth} setAuth={setAuth}/>}>
-              <Route  path="/notifications" element={<NotificationPage />} />
+            <Route path="/notifications" element= {<PrivateRoute isAuth={isAuth} setAuth={setAuth}/>}>
+              <Route path="/notifications" element={<NotificationPage />} />
             </Route>
             <Route path="/profile/:username" element= {<PrivateRoute isAuth={isAuth} setAuth={setAuth}/>}>
               <Route path="/profile/:username" element={<ProfilePage />} />
             </Route>
-            
+            <Route path="/chat" element= {<PrivateRoute isAuth={isAuth} setAuth={setAuth}/>}>
+              <Route path="/chat" element={<ChatRooms />} />
+            </Route>            
+            <Route path="/chat/:roomName" element= {<PrivateRoute isAuth={isAuth} setAuth={setAuth}/>}>
+              <Route path="/chat/:roomName" element={<ChatRoom />} />
+            </Route>            
           </Routes>
         </div>
       </BrowserRouter>
