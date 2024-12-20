@@ -16,43 +16,39 @@ A community-driven platform for developers to connect, collaborate, and grow. De
 
 
 ## Tech Stack:
-### **Frontend**:
+**Frontend**:
 - React.js  
 - TailwindCSS for a responsive and modern design.
 
-### **Backend**:
+**Backend**:
 - Node.js  
 - Express.js for server-side logic.
 
-### **Database**:
+**Database**:
 - MongoDB for seamless and scalable data management.
 
-### **Authentication**:
+**Authentication**:
 - JWT-based secure login system.
 
-### **File Storage**:
-- Local/Cloud storage for uploading and managing user content.
+**File Storage**:
+- Cloudinary storage for uploading and managing images.
 
-### **Real-Time**:
+**Real-Time**:
 - WebSockets for chat functionalities.
 
----
 
-## How to Get Started:
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/yourusername/developers-hub.git
-   cd developers-hub
 
 ## Preview
 - **Landing Page**
   <img src="frontend/public/homePage.png">
   <br/>
-- **View Campaigns**
+- **Signup Page**
   <img src="frontend/public/signupPage.png">
   <br/>
-- **Detailed Camapaign Page**
+- **Profile Page**
   <img src="frontend/public/profilePage.png">
+- **Notifications Page**
   <img src="frontend/public/notificationsPage.png">
+- **Chat Rooms**
   <img src="frontend/public/chatrooms.png">
   <img src="frontend/public/chatroom.png">
